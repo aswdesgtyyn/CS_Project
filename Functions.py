@@ -9,7 +9,7 @@ url= "http://127.0.0.1:8001" # This is Localhost port used 8001
 # SQL Database Parameters (Stored IN TWO FILES Functions.py and Main.py) Update Both
 SQL_user = "root"
 SQL_host = "localhost"
-SQL_pass = "Aswdesgtyyn@26" # Please Enter Password Here
+SQL_pass = "Password" # Please Enter Password Here
 SQL_Data = "Ind_Smart" # Name of Database
 #-----------------------------------------------------------------#
 #Miscellaneous Functions
