@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Indigo Smart Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_dash.css') }}">
+    <script>
+    function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
+</script>
+</head>
+<body>
+    <header>
+        <h1>Indigo Smart Admin Dashboard</h1>
+        <p>Efficiently managing customers and drivers</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('admin_dashboard')}}" class="active">Main Dashboard</a></li>
+            <li><a href="{{ url_for('customer_dashboard') }}" >Customers</a></li>
+            <li><a href="{{ url_for('driver_dashboard') }}">Drivers</a></li>
+            <li><a href="{{ url_for('make_booking')}}">Make a Booking</a></li>
+            <li><a href="#" onclick="deleteCookie('user'); window.location.href = ' {{ url_for('login') }}'; return false;">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="card-container">
+            <div class="card">
+                <h2>Total Customers</h2>
+                <p class="count">{{ total_customers }}</p>
+            </div>
+            <div class="card">
+                <h2>Total Drivers</h2>
+                <p class="count">{{ total_drivers }}</p>
+            </div>
+        </section>
+
+        <section class="data-section">
+            <h2>Customer Details</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>City</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if customers %}
+                        {% for c in customers %}
+                        <tr>
+                            <td>{{ c.id }}</td>
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.email }}</td>
+                            <td>{{ c.phone }}</td>
+                            <td>{{ c.city|default('Not Set', true) }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No customers found</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="data-section">
+        <h2>Driver Details</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if drivers %}
+                        {% for d in drivers %}
+                        <tr>
+                            <td>{{ d.id }}</td>
+                            <td>{{ d.name }}</td>
+                            <td>{{ d.email }}</td>
+                            <td>{{ d.phone }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No drivers found</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Indigo Smart. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

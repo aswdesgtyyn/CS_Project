@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Indigo Smart - Make Booking</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_app.css') }}">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Leaflet Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    
+    <style>
+        .map {
+            height: 300px;
+            width: 100%;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+    
+    <script>
+        function back(){
+            window.location = "{{ url_for('user_page')}}";
+        }
+    </script>
+</head>
+<body>
+<nav>
+    <div class="logo" style="align-items: centre;">Indigo Smart</div>
+    <button class="btn back_btn" onclick="back()" style="float:right;">Back to User Page</button>
+</nav>
+<main>
+    <c><h1>Make a Booking</h1></c>
+    <div class="Login_and_Signup">
+        <form method="POST" action="{{ url_for('make_booking') }}">
+            <label class="lbl" style="font-size: 1.7rem;" for="pickup_location">Pickup Location: &nbsp </label>
+            <input class="text_input" type="text" id="pickup_location" name="pickup_location" placeholder="Type address or click on map" required><br>
+            <div id="pickup_map" class="map"></div>
+            <input type="hidden" id="pickup_lat" name="pickup_lat">
+            <input type="hidden" id="pickup_lng" name="pickup_lng">
+            <br>
+
+            <label class="lbl" style="font-size: 1.7rem;" for="dropoff_location">Drop-off Location:</label>
+            <input class="text_input" type="text" id="dropoff_location" name="dropoff_location" placeholder="Type address or click on map" required><br>
+            <div id="dropoff_map" class="map"></div>
+            <input type="hidden" id="dropoff_lat" name="dropoff_lat">
+            <input type="hidden" id="dropoff_lng" name="dropoff_lng">
+            <br>
+
+            <label class="lbl" style="font-size: 1.7rem;" for="booking_time">Booking Time: &nbsp &nbsp &nbsp </label>
+            <input class="text_input" type="datetime-local" id="booking_time" name="booking_time" required><br><br>
+
+            <input type="submit" class="btn" value="Submit Booking">
+        </form>
+    </div>
+    <br>
+    {% if price %}
+    <div class="Login_and_Signup" style="background-color: #99ffb1;">
+        <c><h2 style="color:black;">Booking Confirmed</h2></c>
+        <p style="text-align:left;color:black">
+            Your Booking has been successfully created!
+            Your Assigned Driver is: <b>{{ driver }}</b> ({{ driver_id}})  <br>
+            Distance : <b>{{ distance }} km</b> <br>
+            Price : <b>₹ {{ price }}</b>
+
+            Please Pay the Driver After the End of the Ride.
+            Thanks for choosing Indigo Smart!
+            We hope to see you again soon.
+        </p>
+    </div>
+    {% endif %}
+    {% if error %}
+    <div class="Login_and_Signup" style="background-color: #ff9999;">
+        <c><h2 style="color:black;">Booking Cancelled</h2></c>
+        <p style="text-align:left;color:black">
+            We are sorry, but we could not process your booking at this time.
+            This may be due to unavailability of drivers or invalid input data.
+            Please try again later or modify your booking details.
+            We apologize for any inconvenience caused.
+        </p>
+    </div>
+    {% endif %}
+</main>
+<footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+</footer>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Leaflet Geocoder JavaScript -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<script>
+    var pickupMap = L.map('pickup_map').setView([28.6139, 77.2090], 13); // Default to Delhi, change as needed
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(pickupMap);
+    
+    var pickupMarker;
+
+    var dropoffMap = L.map('dropoff_map').setView([28.6139, 77.2090], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(dropoffMap);
+    
+    var dropoffMarker;
+
+    pickupMap.on('click', function(e) {
+        if (pickupMarker) {
+            pickupMap.removeLayer(pickupMarker);
+        }
+        pickupMarker = L.marker(e.latlng).addTo(pickupMap);
+        document.getElementById('pickup_lat').value = e.latlng.lat;
+        document.getElementById('pickup_lng').value = e.latlng.lng;
+        
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('pickup_location').value = data.display_name;
+            });
+    });
+    
+    dropoffMap.on('click', function(e) {
+        if (dropoffMarker) {
+            dropoffMap.removeLayer(dropoffMarker);
+        }
+        dropoffMarker = L.marker(e.latlng).addTo(dropoffMap);
+        document.getElementById('dropoff_lat').value = e.latlng.lat;
+        document.getElementById('dropoff_lng').value = e.latlng.lng;
+        
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('dropoff_location').value = data.display_name;
+            });
+    });
+    
+    document.getElementById('pickup_location').addEventListener('change', function() {
+        var address = this.value;
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    var lat = data[0].lat;
+                    var lon = data[0].lon;
+                    pickupMap.setView([lat, lon], 15);
+                    if (pickupMarker) {
+                        pickupMap.removeLayer(pickupMarker);
+                    }
+                    pickupMarker = L.marker([lat, lon]).addTo(pickupMap);
+                    document.getElementById('pickup_lat').value = lat;
+                    document.getElementById('pickup_lng').value = lon;
+                }
+            });
+    });
+    
+    document.getElementById('dropoff_location').addEventListener('change', function() {
+        var address = this.value;
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    var lat = data[0].lat;
+                    var lon = data[0].lon;
+                    dropoffMap.setView([lat, lon], 15);
+                    if (dropoffMarker) {
+                        dropoffMap.removeLayer(dropoffMarker);
+                    }
+                    dropoffMarker = L.marker([lat, lon]).addTo(dropoffMap);
+                    document.getElementById('dropoff_lat').value = lat;
+                    document.getElementById('dropoff_lng').value = lon;
+                }
+            });
+    });
+</script>
+</body>
+</html>

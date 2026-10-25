@@ -1,0 +1,199 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e6f0ff 0%, #f5f8ff 100%);
+  color: #003366;
+}
+
+nav {
+  background: linear-gradient(90deg, #001fd1 60%, #3856ff 100%);
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(63,81,181,0.08);
+}
+
+nav .logo {
+  font-size: 1.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 500;
+  transition: color 0.3s, border-bottom 0.3s;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+nav ul li a:hover {
+  color: #c5cae9;
+  border-bottom: 2px solid #c5cae9;
+}
+
+main {
+  flex-grow: 1;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: rgba(255,255,255,0.7);
+  border-radius: 18px;
+  margin: 2rem auto 1.5rem auto;
+  max-width: 900px;
+  box-shadow: 0 4px 24px rgba(24, 55, 226, 0.08);
+}
+
+main h1 {
+  font-size: 2.7rem;
+  color: #2d47dd;
+  margin-bottom: 1rem;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 1px;
+}
+
+main h2 {
+  font-size: 2rem;
+  color: #3949ab;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+main h3 {
+  font-size: 1.5rem;
+  color: #4a8df3;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+main p {
+  font-size: 1.13rem;
+  color: #283593;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.Login_and_Signup {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  background: #6f85ff;
+  padding: 2.5rem;
+  border-radius: 18px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 24px rgba(24, 55, 226, 0.12);
+}
+.Addresses {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  color: #000000;
+  padding: 2.5rem;
+  border-radius: 18px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 24px rgba(24, 55, 226, 0.12);
+}
+
+.lbl {
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.text_input {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.text_input:focus {
+  outline: none;
+  border-color: #c5cae9;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.addrress_input {
+  color: #000000;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.addrress_input:focus {
+  outline: none;
+  border-color: #c5cae9;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn {
+  background: linear-gradient(90deg, #031db2 60%, #4455b8 100%);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(63,81,181,0.08);
+  margin-top: 1.2rem;
+}
+
+.btn:hover {
+  background: linear-gradient(90deg, #001190 60%, #475aba 100%);
+  transform: translateY(-2px) scale(1.04);
+}
+.back_btn {
+  margin-top: 0;
+}
+.container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.column {
+  flex: 1;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.7);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(24, 55, 226, 0.08);
+}
+
+footer {
+  background: linear-gradient(90deg, #001fd1 60%, #3d5aff 100%);
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.97rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 -2px 8px rgba(63,81,181,0.06);
+}

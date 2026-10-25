@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Indigo Smart</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>
+    function Login(){
+      window.location = "{{ url_for('login') }}";
+    }
+    function Register_User(){
+      window.location = "{{ url_for('register_user')}}";
+    }
+    function Register_Driver(){
+      window.location = "{{ url_for('register_user')}}";
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo"> Indigo Smart </div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <h1>Indigo Smart</h1>
+    <p style="margin-bottom: 2rem;">The Smarter and more Indigoer Way to Travel.</p>
+    <img src="{{ url_for('static', filename='logo.png')}}" style="width: 300px;height:300px;">
+    <br><br>
+    <button class="btn" onclick = Login()>Login</button>
+    <br><br>
+    <button class="btn" onclick = Register_User()>Sign Up! (User)</button>
+    <br><br>
+    <button class="btn" onclick = Register_Driver()>Sign Up! (Driver)</button>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+  </footer>
+
+</body>
+</html>

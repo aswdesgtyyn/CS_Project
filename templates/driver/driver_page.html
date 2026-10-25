@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Indigo Smart - Driver Page</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_app.css') }}">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    
+    <style>
+        #map {
+            height: 450px;
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .complete-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        .complete-btn:hover {
+            background-color: #45a049;
+        }
+        .complete-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .booking-info {
+            background-color: #99a0ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .booking-info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+    
+    <script>
+        function logout(){
+            document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "type=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location = "{{ url_for('home')}}";
+        }
+        
+        function completeRide() {
+            if(confirm("Are you sure you want to mark this ride as completed?")) {
+                document.getElementById('rideForm').submit();
+            }
+        }
+    </script>
+</head>
+<body>
+<nav>
+    <div class="logo" style="align-items: center;">Indigo Smart</div>
+    <button class="btn back_btn" onclick="logout()" style="float:right;">Logout</button>
+</nav> 
+
+<main>
+    <c><h1>Welcome, {{ username }}!</h1></c>
+    <img src="{{ url_for('static', filename='Avatar.png') }}" alt="Driver Avatar" width="200px">
+    
+    <div class="user_page_content">
+        <p>This is your Driver Dashboard!</p>
+        
+        <div class="booking-info">
+            <h2>Your Current Booking</h2>
+            {% if has_booking %}
+                <p><b>Customer Name:</b> {{ user_name }}</p>
+                <p><b>Customer Phone:</b> {{ user_phone }}</p>
+                <p id="pickup"><b>Pickup Location:</b> {{ pickup_location }}</p>
+                <p id="dropoff"><b>Drop-off Location:</b> {{ dropoff_location }}</p>
+                <p><b>Status:</b> {{ status }}</p>
+                
+                <!-- Map Container -->
+                <div id="map"></div>
+                
+                <!-- Complete Ride Form -->
+                <form id="rideForm" method="POST" style="text-align: center;">
+                    <input type="hidden" name="action" value="complete_ride">
+                    <button type="button" class="complete-btn" onclick="completeRide()">
+                        Mark Ride as Completed
+                    </button>
+                </form>
+            {% else %}
+                <p style="text-align: center; font-size: 18px;">No active bookings at the moment.</p>
+                <p style="text-align: center;">Your status: <b>{{ status }}</b></p>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+</footer>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+        crossorigin=""></script>
+
+<!-- Leaflet Routing Machine JavaScript -->
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+<script>
+    {% if has_booking %}
+    // Initialize the map
+    var map = L.map('map').setView([20.5937, 78.9629], 5); // Default center of India
+    
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }).addTo(map);
+    
+    // Geocoding function using Nominatim API
+    async function geocodeAddress(address) {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`,
+                {
+                    headers: {
+                        'User-Agent': 'IndigoSmartCabApp/1.0'
+                    }
+                }
+            );
+            const data = await response.json();
+            
+            if (data && data.length > 0) {
+                return {
+                    lat: parseFloat(data[0].lat),
+                    lon: parseFloat(data[0].lon),
+                    display_name: data[0].display_name
+                };
+            }
+            return null;
+        } catch (error) {
+            console.error('Geocoding error:', error);
+            return null;
+        }
+    }
+    
+    // Function to initialize route
+    async function initializeRoute() {
+        const pickupAddress = "{{ pickup_location }}";
+        const dropoffAddress = "{{ dropoff_location }}";
+        
+        // Geocode both addresses
+        const pickupCoords = await geocodeAddress(pickupAddress);
+        const dropoffCoords = await geocodeAddress(dropoffAddress);
+        
+        if (pickupCoords && dropoffCoords) {
+            // Add markers
+            var pickupMarker = L.marker([pickupCoords.lat, pickupCoords.lon], {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            pickupMarker.bindPopup('<b>Pickup:</b><br>' + pickupAddress);
+            
+            var dropoffMarker = L.marker([dropoffCoords.lat, dropoffCoords.lon], {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            dropoffMarker.bindPopup('<b>Drop-off:</b><br>' + dropoffAddress);
+            
+            // Create routing control
+            var routingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(pickupCoords.lat, pickupCoords.lon),
+                    L.latLng(dropoffCoords.lat, dropoffCoords.lon)
+                ],
+                routeWhileDragging: false,
+                addWaypoints: false,
+                draggableWaypoints: false,
+                fitSelectedRoutes: true,
+                showAlternatives: false,
+                lineOptions: {
+                    styles: [{color: '#6366f1', opacity: 0.8, weight: 5}]
+                },
+                createMarker: function() { return null; }, // Don't create default markers
+                router: L.Routing.osrmv1({
+                    serviceUrl: 'https://router.project-osrm.org/route/v1'
+                })
+            }).addTo(map);
+            
+            // Hide the routing instructions panel
+            routingControl.on('routesfound', function(e) {
+                var routes = e.routes;
+                var summary = routes[0].summary;
+                console.log('Route found: ' + (summary.totalDistance / 1000).toFixed(2) + ' km, ' + 
+                           Math.round(summary.totalTime / 60) + ' minutes');
+            });
+            
+            // Hide the default routing control container
+            setTimeout(function() {
+                var container = document.querySelector('.leaflet-routing-container');
+                if (container) {
+                    container.style.display = 'none';
+                }
+            }, 100);
+            
+            // Fit map to show both markers
+            var group = L.featureGroup([pickupMarker, dropoffMarker]);
+            map.fitBounds(group.getBounds().pad(0.1));
+
+        } else {
+            alert('Unable to geocode addresses. Please check the locations.');
+            console.error('Geocoding failed for one or both addresses');
+        }
+    }
+ 
+    initializeRoute();
+    
+    {% endif %}
+</script>
+
+</body>
+</html>

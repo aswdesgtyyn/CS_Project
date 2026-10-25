@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Indigo Smart - Login</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_app.css') }}">
+  <script>
+    function back(){
+      window.location = "{{ url_for('home')}}";
+    }
+    {% if error_cde == 1 %}
+      alert("Incorrect Password Entered ! \n Please Try again");
+
+    {% elif error_cde == 2 %}
+      alert("Incorrect Username Entered ! \n Please Try again or Register");
+    {% elif error_cde == 3 %}
+      alert("Database Error Encountered ! \n Please Try again later");
+    {% elif error_cde == 4 %}
+      alert("Username or Password cannot be empty ! \n Please Try again");
+    {% else %}
+    
+    {% endif %}
+  </script>
+</head>
+<body>
+<nav>
+    <div class="logo" style ="align-items: centre;">Indigo Smart</div>
+    <button class="btn back_btn" onclick = back() style="float:right;">Back to Homepage</button>
+</nav>
+
+  <!-- Main Content -->
+  <main>
+    <c><h1>Indigo Smart<br>Login</h1></c>
+    <div class="Login_and_Signup">
+      <form action="{{ url_for('login') }}" method="POST">
+        <img src="{{ url_for('static', filename='logo.png')}}" style="width:200px;height:200px;"> 
+        <br>
+        <br>
+        <br>
+        <label for="username" class='lbl'>Username:</label> 
+        <input type="text" id="username" name="username" required class="text_input"><br>
+        <br>
+        <label for="pwd" class='lbl'>Password:</label>
+        <input type="password" id="pwd" name="pwd" requird class="text_input">
+        <br><br>
+        <input type="submit" value="Login" class="btn" style="padding-left: 60px; padding-right:60px; font-size: 22px;font-weight: 300;">
+        <br><br>
+        <p style="color:white;">
+          Don't have an account to register click <br> <a href="{{ url_for('register_user')}}">here(user)</a><br><a href="{{ url_for('register_driver')}}">here(driver)</a>
+        </p>
+      </form> 
+    </div>
+    
+  </main>
+  <footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+  </footer>
+
+</body>
+</html>

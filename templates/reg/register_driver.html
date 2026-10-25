@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Indigo Smart - Login</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_app.css') }}">
+  <script>
+    function back(){
+      window.location = "{{ url_for('home')}}";
+    }
+
+    // This is for Error Handling and Alerts
+    {% if alert_cde == 1 %}
+      alert( {{ alert_msg | safe }});
+    {% else %}
+    
+    {% endif %}
+
+  </script>
+</head>
+<body>
+<nav>
+    <div class="logo" style ="align-items: centre;">Indigo Smart</div>
+    <button class="btn back_btn" onclick = back() style="float:right;">Back to Homepage</button>
+</nav>
+
+  <!-- Main Content -->
+  <main>
+    <c><h1>Indigo Smart<br>Driver Registration</h1></c>
+    <div class="Login_and_Signup">
+      <form method="POST" action="{{ url_for('register_driver') }}">
+        <img src="{{ url_for('static', filename='logo.png')}}" style="width:200px;height:200px;"> 
+        <br>
+        <br>
+        <br>
+        <label for="name" class='lbl'>Full Name:</label> 
+        <input type="text" id="name" name="name" class="text_input">
+        <br>
+        <br>
+        <label for="email" class='lbl'>Email &nbsp &nbsp &nbsp &nbsp :</label> 
+        <input type="text" id="email" name="email" class="text_input">
+        <br>
+        <br>
+        <label for="phone" class='lbl'>Phone No.:</label> 
+        <input type="number" id="phone" name="phone" class="text_input">
+        <br>
+        <br>
+        <label for="username" class='lbl'>Username:</label> 
+        <input type="text" id="username" name="username" class="text_input">
+        <br>
+        <br>
+        <label for="pwd" class='lbl'>Password:</label>
+        <input type="password" id="pwd" name="pwd" class="text_input">
+        <br>
+        <br>
+        <input type="checkbox" id="czech" name="czech" value="1">
+        <label for="czech" class='lbl' style="font-size: 13px;">I agree to the Indigo Smart <br> <a href="{{ url_for('terms')}}">Terms & Conditions and Privacy Policy</a></label>
+        <br>
+        <br>
+        <input type="submit" value="Sign up" class="btn" style="padding-left: 60px; padding-right:60px; font-size: 22px;font-weight: 300;">
+        <br><br>
+        <p style="color:white;">
+          Already have an account login click <a href="{{ url_for('login')}}">here</a>
+          <br>
+          Want to create a User Account click <a href="{{ url_for('register_user') }}">here</a>
+        </p>
+      </form> 
+    </div>
+    
+  </main>
+  <footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+  </footer>
+
+</body>
+</html>

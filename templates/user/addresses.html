@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Indigo Smart - Make Booking</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_app.css') }}">
+    <script>
+        function back(){
+            window.location = "{{ url_for('user_page')}}";
+        }
+        {% if updated %}
+        alert("Address was updated successfully!");
+        {% endif %}
+    </script>
+</head>
+<body>
+<nav>
+    <div class="logo" style="align-items: centre;">Indigo Smart</div>
+    <button class="btn back_btn" onclick="back()" style="float:right;">Back to User Page</button>
+</nav>
+<main>
+    <c><h1>Addresses</h1></c>
+    <div class="Addresses" style="margin-bottom: 30px;background-color: #ffdb9d;">
+        <h2 style="margin-bottom: 10px;">Current Addresses</h2>
+
+        <p style="color: black;text-align: left;">
+        <b>Home Address:</b> {{ home_address }} <br>
+        <b>Work Address:</b> {{ work_address }} <br>
+        <b>Other Address:</b> {{ other_address }}<br>
+        </p>
+    </div>
+    <div class="Addresses" style="margin-bottom: 30px;background-color: #a5f1b0;">
+        <h2>Update Addresses</h2>
+        <form method="POST" action="{{ url_for('addresses') }}">
+            <label style="font-size: 1rem;color:black;font-weight: bold;" for="home_address">Home Address: &nbsp </label>
+            <input class="addrress_input" type="text" id="home_address" name="home_address" placeholder="Please Enter Home Address" required><br>
+            <input type="submit" class="btn" value="Update Home Address" style="margin-top: 10px;">
+        </form>
+        <br>
+        <form method="POST" action="{{ url_for('addresses') }}">
+            <label style="font-size: 1rem;color:black;font-weight: bold;" for="work_address">Work Address: &nbsp </label>
+            <input class="addrress_input" type="text" id="work_address" name="work_address" placeholder="Please Enter Work Address" required><br>
+            <input type="submit" class="btn" value="Update Work Address" style="margin-top: 10px;">
+        </form>
+        <br>
+        <form method="POST" action="{{ url_for('addresses') }}">
+            <label style="font-size: 1rem;color:black;font-weight: bold;" for="other_address">Other Address: &nbsp </label>
+            <input class="addrress_input" type="text" id="other_address" name="other_address" placeholder="Please Enter Other Address" required><br>
+            <input type="submit" class="btn" value="Update Other Address" style="margin-top: 10px;">
+        </form>
+    </div>
+
+    
+
+    <br>
+</main>
+<footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+</footer>
+</body>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Indigo Smart Drivers Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_dash.css') }}">
+    <script>
+    function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Indigo Smart Drivers Dashboard</h1>
+        <p>Detailed driver information and management</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('admin_dashboard')}}" >Main Dashboard</a></li>
+            <li><a href="{{ url_for('customer_dashboard') }}" >Customers</a></li>
+            <li><a href="{{ url_for('driver_dashboard') }}" class="active">Drivers</a></li>
+            <li><a href="{{ url_for('make_booking')}}">Make a Booking</a></li>
+            <li><a href="#" onclick="deleteCookie('user'); window.location.href = ' {{ url_for('login') }}'; return false;">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="card-container">
+            <div class="card">
+                <h2>Total Drivers</h2>
+                <p class="count">{{ total_drivers }}</p>
+            </div>
+            <div class="card">
+                <h2>Active Drivers</h2>
+                <p class="count">{{ active_drivers }}</p>
+            </div>
+            <div class="card">
+                <h2>Inactive Drivers</h2>
+                <p class="count">{{ inactive_drivers }}</p>
+            </div>
+        </section>
+
+        <section class="data-section">
+            <h2>Driver Details</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Driver ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Vehicle Number</th>
+                            <th>Vehicle Type</th>
+                            <th>Status</th>
+                            <th>Total Rides</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if drivers %}
+                            {% for driver in drivers %}
+                            <tr>
+                                <td>{{ driver.id }}</td>
+                                <td>{{ driver.name }}</td>
+                                <td>{{ driver.email }}</td>
+                                <td>{{ driver.phone }}</td>
+                                <td>{{ driver.license|default('Not Assigned') }}</td>
+                                <td>{{ driver.vehicle_type if driver.vehicle_type else 'Not Assigned' }}</td>
+                                <td>
+                                    {% set status_class = driver.status|lower|replace(' ', '-') %}
+                                    <span class="badge status-{{ status_class }}">
+                                        {% if driver.status == 'Available' %}
+                                        ✅ Available
+                                        {% elif driver.status == 'On Trip' %}
+                                        🚗 On Trip
+                                        {% else %}
+                                        ⚪ Offline
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ driver.total_rides|default(0) }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9">No drivers found</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Indigo Smart. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Indigo Smart -  Contact us</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">Indigo Smart</div>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+        <h1 style="text-align:left">Contact</h1>
+
+        <p class="ltext">Facing any issues contact us at Support@Indigosmart.com or call 92163842942</p>
+        <br><br><br>
+        <h1 style="text-align:left;font-size: 2rem;">FAQ</h1>
+        
+        <p class="FAQues">1. What is Indigo Smart?</p>
+        <p class="ltext">Indigo Smart is a tech-enabled cab service committed to providing <b>safe, reliable, and comfortable transportation</b>. We offer on-demand and scheduled rides across urban and semi-urban areas.</p>
+        <br>
+        <br>
+        <p class="FAQues">2. Is Indigo Smart available 24/7?</p>
+        <p class="ltext">Yes, our services are available <b>24 hours a day, 7 days a week</b>, including holidays.</p>
+        <br>
+        <br>
+        <p class="FAQues">3. How are fares calculated?</p>
+        <p class="ltext">Fares are calculated based on:</p>
+        <ul class="ltext" style="margin-left: 40px">
+          <li><b>Base fare</b></li>
+          <li><b>Distance traveled</b></li>
+          <li><b>Time taken</b></li>
+          <li><b>Applicable surge pricing during high-demand periods</b></li>
+        </ul>
+        <p class="ltext">A fare estimate is shown before you confirm your booking.</p>
+        <br>
+        <br>
+        <p class="FAQues">4. Can I schedule a ride in advance?</p>
+        <p class="ltext">Absolutely. You can schedule a ride up to <b>7 days in advance</b> using our app or website.</p>
+        <br>
+        <br>
+        <p class="FAQues">5. Is there a cancellation fee?</p>
+        <p class="ltext">Yes, a minimal cancellation fee may apply if:</p>
+        <ul class="ltext" style="margin-left: 40px">
+          <li><b>The cab has already been dispatched</b></li>
+          <li><b>The cancellation is made beyond the free cancellation window (usually 5–10 minutes after booking)</b></li>
+        </ul>
+        <br>
+        <br>
+        <br>
+        <br>
+        <p style="text-align:right">Made by Indigosmart LLC</p>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Indigo Smart All Rights Reserved
+  </footer>
+
+</body>
+</html>
